@@ -9,4 +9,4 @@ itsdangerous==2.2.0
 cryptography==44.0.0
 pandas==2.2.3
 openpyxl==3.1.5
-email-validator==2.2.0
+email-validator==2.3.0
