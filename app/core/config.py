@@ -10,6 +10,7 @@ class InvalidConfigurationError(RuntimeError):
 
 class Settings(BaseSettings):
     app_name: str = "KeyVault"
+    app_version: str = "dev"
     app_env: str = "production"
     base_url: str = "http://localhost:8080"
     root_path: str = ""
@@ -22,6 +23,7 @@ class Settings(BaseSettings):
     upload_dir: str = "/app/uploads"
     max_upload_mb: int = 25
     allowed_hosts: str = ""
+    github_repo: str = "antybubbs/KeyVault"
 
     class Config:
         env_file = ".env"

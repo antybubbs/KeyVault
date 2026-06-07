@@ -65,7 +65,7 @@ def require_editor(request: Request, db: Session = Depends(get_db)) -> User:
 
 @router.get("/login")
 def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request, "error": None, **csrf_context(request)})
+    return templates.TemplateResponse("login.html", {"request": request, "error": None, **csrf_context(request, include_version=False)})
 
 
 @router.post("/login")
@@ -73,12 +73,12 @@ def login(request: Request, email: str = Form(...), password: str = Form(...), c
     validate_csrf_token(request, csrf_token)
     key = client_key(request)
     if login_is_limited(key):
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Too many failed sign-in attempts. Try again later.", **csrf_context(request)}, status_code=429)
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Too many failed sign-in attempts. Try again later.", **csrf_context(request, include_version=False)}, status_code=429)
     user = db.query(User).filter(User.email == email.strip().lower(), User.is_active == True).first()
     password_hash = user.password_hash if user else DUMMY_PASSWORD_HASH
     if not verify_password(password, password_hash) or not user:
         record_login_failure(key)
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid email or password", **csrf_context(request)}, status_code=401)
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid email or password", **csrf_context(request, include_version=False)}, status_code=401)
     request.session.clear()
     request.session["user_id"] = user.id
     LOGIN_FAILURES.pop(key, None)

@@ -166,3 +166,5 @@ cd /opt/keyvault
 docker compose pull
 docker compose up -d
 ```
+
+The sidebar shows the installed version and checks GitHub releases periodically. If the server cannot reach GitHub, the app still works and the latest version is shown as unknown.

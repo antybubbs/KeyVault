@@ -1,5 +1,6 @@
 import secrets
 from fastapi import HTTPException, Request, status
+from app.services.version import version_status
 
 CSRF_SESSION_KEY = "csrf_token"
 
@@ -12,8 +13,11 @@ def csrf_token(request: Request) -> str:
     return token
 
 
-def csrf_context(request: Request) -> dict[str, str]:
-    return {"csrf_token": csrf_token(request)}
+def csrf_context(request: Request, include_version: bool = True) -> dict[str, object]:
+    context: dict[str, object] = {"csrf_token": csrf_token(request)}
+    if include_version:
+        context["version_status"] = version_status()
+    return context
 
 
 def validate_csrf_token(request: Request, submitted_token: str | None) -> None:
